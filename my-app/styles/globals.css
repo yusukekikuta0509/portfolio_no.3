@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* styles/globals.css */
+html, body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* 英語の場合は Tangerine（筆記体）を使用 */
+  /* styles/globals.css */
+.english {
+  font-family: 'Tangerine', cursive; /* これを Noto Sans JP に変更 */
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+/* 日本語用は、明朝体からモダンなフォントに変更する場合 */
+.japanese {
+  font-family: 'Noto Sans JP', sans-serif;
+  /* もしくは、M PLUS Rounded 1c に変更する場合は:
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  */
+}
+
+  
+  /* その他、必要なグローバルスタイルを追加 */
+  

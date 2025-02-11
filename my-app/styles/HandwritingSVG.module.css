@@ -1,0 +1,45 @@
+/* styles/HandwritingSVG.module.css */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fff;
+}
+
+/* グローバルセレクタを避けるためローカルクラスを使用 */
+.svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.strokePath {
+  /* 取得したパス全長を利用 */
+  stroke-dasharray: var(--path-length);
+  stroke-dashoffset: var(--path-length);
+  /* 2つのアニメーションを同時に適用
+     draw: 線を描くアニメーション（4秒）
+     fadeFill: 塗りのフェードイン（4秒後に1秒間）
+  */
+  animation: draw 15s ease forwards, fadeFill 1s ease forwards 2s;
+  /* すでにfill属性はblackとしているので、初期は非表示にする */
+  fill-opacity: 0;
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: var(--path-length);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fadeFill {
+  from {
+    fill-opacity: 0;
+  }
+  to {
+    fill-opacity: 1;
+  }
+}
