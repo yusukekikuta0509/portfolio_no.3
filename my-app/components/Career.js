@@ -21,7 +21,7 @@ const listVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 1, // 各項目の開始間隔（秒）
+      staggerChildren: 0.5, // 各項目の開始間隔（秒）
     },
   },
 };

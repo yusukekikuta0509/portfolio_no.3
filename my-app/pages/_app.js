@@ -1,14 +1,13 @@
 // pages/_app.js
-import '../styles/globals.css';
-import { LanguageProvider } from '../context/LanguageContext';
+import { body_font, display_font } from '../lib/fonts'
+import '../styles/globals.css' // 他のグローバルスタイル
 
-function MyApp({ Component, pageProps, router }) {
-  const getLayout = Component.getLayout || ((page) => page);
+function MyApp({ Component, pageProps }) {
   return (
-    <LanguageProvider>
-      {getLayout(<Component {...pageProps} />)}
-    </LanguageProvider>
-  );
+    <div className={`${body_font.variable} ${display_font.variable}`}>
+      <Component {...pageProps} />
+    </div>
+  )
 }
 
-export default MyApp;
+export default MyApp

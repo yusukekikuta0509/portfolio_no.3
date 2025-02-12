@@ -26,6 +26,9 @@
   fill-opacity: 0;
 }
 
+
+
+
 @keyframes draw {
   from {
     stroke-dashoffset: var(--path-length);
@@ -41,5 +44,27 @@
   }
   to {
     fill-opacity: 1;
+  }
+}
+
+.engineerText {
+  opacity: 0;
+  visibility: hidden; /* 最初は非表示にする */
+  animation: fadeInText 1s ease forwards;
+  animation-delay: 15s; /* SVG のアニメーションが完了するタイミングに合わせる */
+  animation-fill-mode: backwards; /* delay 時も初期状態を適用 */
+}
+
+@keyframes fadeInText {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  /* 1%の時点で visibility を visible にすることで、以降フェードインできる */
+  1% {
+    visibility: visible;
+  }
+  100% {
+    opacity: 1;
   }
 }

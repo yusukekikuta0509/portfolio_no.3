@@ -2,6 +2,7 @@
 import Layout from '../components/Layout';
 import HandwritingText from '../components/HandwritingSVG';
 import NavBar from '../components/NavBar';
+import About from '../components/About'; // 新規追加
 import Career from '../components/Career';
 import Skill from '../components/Skill';
 import Projects from '../components/ProjectSection';
@@ -15,6 +16,7 @@ export default function Home() {
     <Layout>
       <NavBar />
       <HandwritingText />
+      <About />        {/* ここに About セクションを追加 */}
       <Career />
       <Skill />
       <Projects />

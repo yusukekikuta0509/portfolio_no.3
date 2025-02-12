@@ -51,15 +51,6 @@ const projects = [
   },
   {
     id: 6,
-    title: "麻雀点数計算",
-    description:
-      "ReactとTailWindを使用して、麻雀の点数計算を自動で行うアプリを作成しました。",
-    image: "/majan.png",
-    hasImage: true,
-    slug: "mahjong-score"
-  },
-  {
-    id: 7,
     title: "Financial Modeling Prep",
     description:
       "株式会社ValueGlance様のインターンの試験として財務データフィルタリングアプリケーションを開発しました。",
@@ -68,24 +59,7 @@ const projects = [
     link: "https://apple-ctb8.vercel.app/",
     slug: "financial-modeling-prep"
   },
-  {
-    id: 8,
-    title: "SwiftDeploy",
-    description:
-      "Vercelを使用して自動デプロイを実現する『SwiftDeploy』をリリースしました。",
-    hasImage: false,
-    link: "https://webapp-khaki-ten.vercel.app/",
-    slug: "swiftdeploy"
-  },
-  {
-    id: 9,
-    title: "BlockChain App",
-    description:
-      "Deposit機能などがあるブロックチェーン取引所アプリケーションの開発。",
-    hasImage: false,
-    link: "https://webapp-khaki-ten.vercel.app/",
-    slug: "swiftdeploy"
-  }
+  
 ];
 
 const itemVariants = {
@@ -105,7 +79,7 @@ const ProjectSection = ({ lang = 'en' }) => {
         className={`bg-white rounded-xl shadow-2xl p-10 mx-4 w-full max-w-3xl text-black transition-all duration-500 ${lang === 'ja' ? 'japanese' : 'english'}`}
         style={{ overflow: 'hidden' }}
       >
-        <h2 className="text-4xl font-bold mb-6">Works & Projects</h2>
+        <h2 className="text-4xl  mb-6">Works & Projects</h2>
         <motion.ul
           layout
           initial="hidden"
@@ -118,7 +92,7 @@ const ProjectSection = ({ lang = 'en' }) => {
               variants={itemVariants}
               className="border-t border-gray-300 pt-4"
             >
-              <h3 className="text-2xl font-bold mb-2">{proj.title}</h3>
+              <h3 className="text-2xl  mb-2">{proj.title}</h3>
               <p className="mb-2">{proj.description}</p>
               <Link href={`/projects/${proj.slug}`} className="text-gray-800 hover:underline">
                 View Details
