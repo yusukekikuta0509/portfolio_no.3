@@ -34,7 +34,7 @@ const Skills = ({ lang = 'en' }) => {
       data: [85, 80, 90],
     },
     "Other Skills": {
-      labels: ['Git/GitHub', 'Database (MySQL)', 'AWS'],
+      labels: ['Git/GitHub', 'Database (PostgreSQL)', 'AWS'],
       data: [90, 65, 90],
     },
   };
@@ -135,9 +135,7 @@ const Skills = ({ lang = 'en' }) => {
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        <h2 className={`text-6xl md:text-7xl font-display font-medium ${lang === 'en' ? 'english text-black' : 'text-black'} mb-12`}>
-          Skills
-        </h2>
+        <h2 className="section-title">Skills</h2>
         <div className="flex justify-center space-x-8 mb-12">
           {Object.keys(categories).map((category) => (
             <button

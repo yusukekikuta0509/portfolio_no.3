@@ -74,12 +74,13 @@ const ProjectSection = ({ lang = 'en' }) => {
 
   return (
     <section id="projects" className="py-32 bg-gray-100 flex flex-col items-center">
+      <h2 className="section-title">Work & Projects</h2>
       <motion.div
         layout
         className={`bg-white rounded-xl shadow-2xl p-10 mx-4 w-full max-w-3xl text-black transition-all duration-500 ${lang === 'ja' ? 'japanese' : 'english'}`}
         style={{ overflow: 'hidden' }}
       >
-        <h2 className="text-4xl  mb-6">Works & Projects</h2>
+        
         <motion.ul
           layout
           initial="hidden"

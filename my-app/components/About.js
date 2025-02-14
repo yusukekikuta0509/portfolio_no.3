@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FaGithub } from 'react-icons/fa';
 
+
 const About = () => {
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => setExpanded(prev => !prev);
@@ -28,7 +29,7 @@ const About = () => {
 
         {/* 自己紹介エリア */}
         <div className="flex-1">
-          <h2 className="text-6xl  mb-4 text-gray-900 text-center`">
+          <h2 className="section-title">
             About Me
           </h2>
           

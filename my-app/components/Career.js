@@ -34,12 +34,7 @@ const itemVariants = {
 const Career = () => {
   return (
     <section id="career" style={{ padding: '50px 20px' }}>
-      <h2
-        className="english"
-        style={{ fontSize: '3rem', marginBottom: '30px', textAlign: 'center' }}
-      >
-        Career
-      </h2>
+      <h2 className="section-title">Career</h2>
       <div
         className="career-timeline japanese"
         style={{

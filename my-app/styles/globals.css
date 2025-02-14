@@ -19,6 +19,99 @@ h1, h2, h3 {
   */
 }
 
-  
+/* styles/global.css など */
+.section-title {
+  font-size: 3rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+h3:lang(ja) {
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic Pro", "Meiryo", sans-serif;
+}
+/* セクション全体 */
+.event-section {
+  padding: 50px 20px;
+  background-color: #f7f7f7;
+  position: relative;
+}
+
+/* セクションタイトル：ゴシック体に変更 */
+.event-section-title {
+  text-align: center;
+  font-family: 'Helvetica Neue', 'Yu Gothic', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #333;
+}
+
+/* カードのスタイル */
+.event-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* カード内の画像 */
+.event-card-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+/* カードタイトル・説明 */
+.event-card-title {
+  font-family: 'Helvetica Neue', 'Yu Gothic', sans-serif;
+  color: #333;
+  margin-bottom: 10px;
+}
+.event-card-description {
+  font-family: 'Helvetica Neue', 'Yu Gothic', sans-serif;
+  color: #666;
+}
+
+/* 2枚の場合のレイアウト */
+.event-two-layout {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* 1枚の場合のレイアウト */
+.event-one-layout {
+  display: flex;
+  justify-content: center;
+}
+
+/* Swiper のデフォルトナビゲーションボタンの上書き */
+.event-swiper .swiper-button-prev,
+.event-swiper .swiper-button-next {
+  background-color: #888;
+  color: #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.event-swiper .swiper-button-prev::after,
+.event-swiper .swiper-button-next::after {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* ナビゲーションボタンのホバー時 */
+.event-swiper .swiper-button-prev:hover,
+.event-swiper .swiper-button-next:hover {
+  background-color: #aaa;
+}
+
   /* その他、必要なグローバルスタイルを追加 */
   

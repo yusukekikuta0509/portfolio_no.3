@@ -1,4 +1,3 @@
-// pages/index.js
 import Layout from '../components/Layout';
 import HandwritingText from '../components/HandwritingSVG';
 import NavBar from '../components/NavBar';
@@ -8,6 +7,7 @@ import Skill from '../components/Skill';
 import Projects from '../components/ProjectSection';
 import Blog from '../components/Blog';
 import Event from '../components/Event';
+import Company from '../components/Company'; // 追加
 import Contact from '../components/Contact';
 import { motion, AnimatePresence } from 'framer-motion';
 import { parseStringPromise } from 'xml2js';
@@ -22,9 +22,9 @@ export default function Home({ articles }) {
       <Career />
       <Skill />
       <Projects />
-      {/* Blog コンポーネントに記事情報を渡す */}
       <Blog articles={articles} />
       <Event />
+      <Company /> {/* Company セクションを Event の後に追加 */}
       <Contact />
     </Layout>
   );
