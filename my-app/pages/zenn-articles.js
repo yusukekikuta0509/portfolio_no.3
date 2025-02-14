@@ -1,74 +1,76 @@
-// pages/zenn-articles.js
 import React from 'react';
 import Blog from '../components/Blog';
 import { parseStringPromise } from 'xml2js';
 
-// ハードコーディングした RSS XML の例
-const hardcodedRSS = `<?xml version="1.0" encoding="UTF-8" ?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" 
-     xmlns:content="http://purl.org/rss/1.0/modules/content/" 
-     xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-  <channel>
-    <title><![CDATA[ Yusuke Kikutaさんのフィード ]]></title>
-    <description><![CDATA[ ZennのYusuke Kikutaさん（@yusukekikuta）のRSSフィードです ]]></description>
-    <link>https://zenn.dev/yusukekikuta</link>
-    <image>
-      <url>https://storage.googleapis.com/zenn-user-upload/avatar/e38b66c4d4.jpeg</url>
-      <title>Yusuke Kikutaさんのフィード</title>
-      <link>https://zenn.dev/yusukekikuta</link>
-    </image>
-    <generator>zenn.dev</generator>
-    <lastBuildDate>Wed, 12 Feb 2025 15:09:30 GMT</lastBuildDate>
-    <atom:link href="https://zenn.dev/yusukekikuta/feed" rel="self" type="application/rss+xml"/>
-    <language><![CDATA[ ja ]]></language>
-    <item>
-      <title><![CDATA[ RestfulなAPI設計について考える ]]></title>
-      <description><![CDATA[ はじめに ... ここに記事概要の詳細な説明が入ります。 ]]></description>
-      <link>https://zenn.dev/yusukekikuta/articles/b7cb70ee7dc715</link>
-      <guid isPermaLink="true">https://zenn.dev/yusukekikuta/articles/b7cb70ee7dc715</guid>
-      <pubDate>Mon, 10 Feb 2025 01:37:49 GMT</pubDate>
-    </item>
-    <!-- 必要に応じて他の item を追加 -->
-  </channel>
-</rss>`;
-
 export default function ZennArticlesPage({ articles }) {
+  console.log('Articles in ZennArticlesPage:', articles);
   return <Blog articles={articles} />;
 }
 
 export async function getStaticProps() {
   try {
-    // ハードコーディングした XML を利用
-    const xmlData = hardcodedRSS;
-    // explicitArray: false でパース結果をシンプルに
+    console.log('Process.env.NEXT_PUBLIC_RSS_URL:', process.env.NEXT_PUBLIC_RSS_URL);
+    
+    const rssUrl = process.env.NEXT_PUBLIC_RSS_URL;
+    if (!rssUrl) {
+      throw new Error('NEXT_PUBLIC_RSS_URL 環境変数が設定されていません。');
+    }
+    
+    console.log('Fetching RSS from:', rssUrl);
+    const res = await fetch(rssUrl);
+    if (!res.ok) {
+      throw new Error(`RSSフィードの取得に失敗しました: ${res.status}`);
+    }
+    
+    const xmlData = await res.text();
+    console.log('Fetched XML (first 200 chars):', xmlData.slice(0, 200));
+    
     const parsed = await parseStringPromise(xmlData, { explicitArray: false });
-    console.log("Parsed RSS:", JSON.stringify(parsed, null, 2));
+    console.log('Parsed XML object:', parsed);
 
-    const channel = parsed.rss.channel;
-    let items = channel.item;
+    let items = [];
+    if (parsed.rss && parsed.rss.channel && parsed.rss.channel.item) {
+      console.log("RSS形式が検出されました");
+      items = parsed.rss.channel.item;
+    } else if (parsed.feed && parsed.feed.entry) {
+      console.log("Atom形式が検出されました");
+      items = parsed.feed.entry;
+    } else {
+      console.error("不明なフィード形式です", parsed);
+    }
+    
     if (!items) {
       items = [];
     } else if (!Array.isArray(items)) {
       items = [items];
     }
-    console.log("Items:", items);
-
-    const articles = items.map((item) => ({
-      title: item.title,
-      link: item.link,
-      summary: item.description,
-      pubDate: item.pubDate,
-      // slug をリンクの末尾から生成（適宜変更）
-      slug: item.link.split('/').pop() || 'article'
-    }));
-    console.log("Articles:", articles);
-
+    
+    const articles = items.map((item) => {
+      const title = item.title;
+      const link = typeof item.link === 'object' ? item.link._ || item.link : item.link;
+      const summary = item.description || item.summary || '';
+      const pubDate = item.pubDate || item.published || item.updated || '';
+      
+      let slug = '';
+      if (link) {
+        const parts = link.split('/');
+        slug = parts.pop() || parts.pop();
+      }
+      
+      return { title, link, summary, pubDate, slug };
+    });
+    
+    console.log('Extracted articles:', articles);
+    
     return {
       props: { articles },
       revalidate: 60,
     };
   } catch (error) {
-    console.error("Error fetching/parsing RSS:", error);
-    return { props: { articles: [] }, revalidate: 60 };
+    console.error("Error in getStaticProps:", error);
+    return {
+      props: { articles: [] },
+      revalidate: 60,
+    };
   }
 }

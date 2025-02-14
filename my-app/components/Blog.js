@@ -1,4 +1,3 @@
-// components/Blog.js
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -9,7 +8,7 @@ const cardVariants = {
 };
 
 const Blog = ({ articles = [] }) => {
-  console.log('Articles:', articles); // Add this line to check the articles prop
+  console.log('Articles in Blog component:', articles);
 
   return (
     <section id="blog" className="py-32 bg-gray-100 flex flex-col items-center">
@@ -26,7 +25,9 @@ const Blog = ({ articles = [] }) => {
             >
               <h3 className="text-2xl mb-2">{article.title}</h3>
               <p className="mb-2" dangerouslySetInnerHTML={{ __html: article.summary }} />
-              <p className="text-sm text-gray-500 mb-2">{new Date(article.pubDate).toLocaleDateString('ja-JP')}</p>
+              <p className="text-sm text-gray-500 mb-2">
+                {new Date(article.pubDate).toLocaleDateString('ja-JP')}
+              </p>
               <Link href={`/blog/${article.slug}`} legacyBehavior>
                 <a className="text-gray-800 hover:underline">Read More</a>
               </Link>
