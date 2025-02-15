@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
       <header>
         <NavBar />
       </header>
-      <main style={{ marginTop: '60px' }}>{/* 固定ヘッダー分の余白 */}
+      <main style={{ marginTop: '100px' }}>{/* ヘッダー分の余白（100pxに合わせる） */}
         {children}
       </main>
       <footer style={{ textAlign: 'center', padding: '20px' }}>

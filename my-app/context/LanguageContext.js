@@ -1,13 +1,15 @@
-// context/LanguageContext.js
-import { createContext, useState, useContext } from 'react';
+// contexts/LanguageContext.js
+import React, { createContext, useState, useContext } from 'react';
 
-const LanguageContext = createContext();
+const LanguageContext = createContext({
+  language: 'ja',
+  toggleLanguage: () => {},
+});
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState('en'); // デフォルトは英語
-
+  const [language, setLanguage] = useState('ja');
   const toggleLanguage = () => {
-    setLanguage(prev => (prev === 'en' ? 'ja' : 'en'));
+    setLanguage((prev) => (prev === 'ja' ? 'en' : 'ja'));
   };
 
   return (

@@ -7,6 +7,8 @@
   font-family: var(--body-font), sans-serif;
 }
 
+
+
 h1, h2, h3 {
   font-family: var(--display-font), serif;
 }
@@ -114,4 +116,5 @@ h3:lang(ja) {
 }
 
   /* その他、必要なグローバルスタイルを追加 */
+  
   

@@ -6,22 +6,14 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          {/* Noto Sans JP の読み込み
+          {/* Josefin Sans の読み込み */}
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
           <link
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap"
-            rel="stylesheet"
-          /> */}
-          {/* または M PLUS Rounded 1c を読み込みたい場合 */}
-          
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap"
             rel="stylesheet"
           />
-        
+          {/* You can also remove any other conflicting font links here */}
         </Head>
         <body>
           <Main />
