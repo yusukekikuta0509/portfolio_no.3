@@ -11,7 +11,7 @@ function AppContent({ Component, pageProps }) {
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={language} // 言語が変わるとキーが変わるので再描画
+        key={language} // 言語が変わると key が変わるので再描画される
         initial={{ filter: 'blur(8px)', opacity: 0 }}
         animate={{ filter: 'blur(0px)', opacity: 1 }}
         exit={{ filter: 'blur(8px)', opacity: 0 }}
@@ -26,12 +26,13 @@ function AppContent({ Component, pageProps }) {
 function MyApp({ Component, pageProps }) {
   return (
     <div className={`${body_font.variable} ${display_font.variable}`}>
-    <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}>
-      <LanguageProvider>
-        <Component {...pageProps} />
-        <MobileWarning />
-      </LanguageProvider>
-    </GoogleReCaptchaProvider>
+      <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}>
+        <LanguageProvider>
+          {/* AppContent を使って、言語切替時のアニメーションを適用 */}
+          <AppContent Component={Component} pageProps={pageProps} />
+          <MobileWarning />
+        </LanguageProvider>
+      </GoogleReCaptchaProvider>
     </div>
   );
 }
