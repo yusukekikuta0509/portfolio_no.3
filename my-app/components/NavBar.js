@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
-import { useLanguage } from '../context/LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const navItems = [
   { id: 'about', label: 'About' },
@@ -17,27 +17,41 @@ const navItems = [
 
 const NavBar = () => {
   const [activeSection, setActiveSection] = useState(null);
-  const [headerVisible, setHeaderVisible] = useState(false);
-  const { language, toggleLanguage } = useLanguage();
+  const [sticky, setSticky] = useState(false);
 
+  // About セクションに達したら navbar を固定（sticky）状態にする
+  useEffect(() => {
+    const aboutSection = document.getElementById('about');
+    if (!aboutSection) return;
+    const handleScroll = () => {
+      // about セクションの上端の位置（画面上部からの距離）
+      const threshold = aboutSection.offsetTop;
+      if (window.pageYOffset >= threshold) {
+        setSticky(true);
+      } else {
+        setSticky(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    // 初回実行
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // 各セクションが画面に表示された際の activeSection 更新（IntersectionObserver を利用）
   useEffect(() => {
     const observerOptions = {
       root: null,
       rootMargin: '0px',
       threshold: 0.5,
     };
-
     const observerCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           setActiveSection(entry.target.id);
-          if (entry.target.id === 'about') {
-            setHeaderVisible(true);
-          }
         }
       });
     };
-
     const observer = new IntersectionObserver(observerCallback, observerOptions);
     navItems.forEach((item) => {
       const element = document.getElementById(item.id);
@@ -69,26 +83,29 @@ const NavBar = () => {
       <motion.nav
         className="navbar"
         initial={{ y: -150, opacity: 0 }}
-        animate={{ y: headerVisible ? 0 : -150, opacity: headerVisible ? 1 : 0 }}
+        animate={{ y: sticky ? 0 : -150, opacity: sticky ? 1 : 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
-          height: '100px',
+          height: '80px',
           backgroundColor: '#fff',
           zIndex: 1000,
           boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
           display: 'flex',
           alignItems: 'center',
-          padding: '0 20px',
+          justifyContent: 'space-between',
+          padding: '0 40px',
+          transition: 'all 0.8s ease-out',
         }}
       >
-        <div className="section-title">
+        {/* 左側：サイトタイトル */}
+        <div className="navbar-left" style={{ display: 'flex', alignItems: 'center' }}>
           <h1
             style={{
-              margin: '20px auto 0',
+              margin: 0,
               fontSize: '1.5rem',
               fontFamily: "'Josefin Sans', sans-serif",
             }}
@@ -96,45 +113,39 @@ const NavBar = () => {
             Yusuke Kikuta's Portfolio
           </h1>
         </div>
-        <ul
-          style={{
-            display: 'flex',
-            flex: '1',
-            justifyContent: 'center',
-            listStyle: 'none',
-            margin: 0,
-            padding: 0,
-            fontFamily: "'Josefin Sans', sans-serif"
-          }}
-        >
-          {navItems.map((item) => (
-            <motion.li
-              key={item.id}
-              onClick={() => handleNavClick(item.id)}
-              style={{ margin: '0 15px', cursor: 'pointer' }}
-              animate={{ scale: activeSection === item.id ? 1.3 : 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              {item.label}
-            </motion.li>
-          ))}
-        </ul>
-        <button onClick={toggleLanguage} className="language-toggle">
-          {language === 'ja' ? 'EN' : 'JA'}
-        </button>
-        <style jsx>{`
-          .language-toggle {
-            background: none;
-            border: 1px solid #000;
-            padding: 5px 10px;
-            font-family: 'Josefin Sans', sans-serif;
-            color: #000;
-            transition: transform 0.3s;
-          }
-          .language-toggle:hover {
-            transform: scale(1.1);
-          }
-        `}</style>
+
+        {/* 中央：ナビゲーションメニュー */}
+        <div className="navbar-center" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+          <ul
+            style={{
+              display: 'flex',
+              listStyle: 'none',
+              margin: 0,
+              padding: 0,
+              gap: '20px',
+              fontFamily: "'Josefin Sans', sans-serif",
+            }}
+          >
+            {navItems.map((item) => (
+              <li
+                key={item.id}
+                onClick={() => handleNavClick(item.id)}
+                style={{
+                  cursor: 'pointer',
+                  transition: 'transform 0.3s',
+                  transform: activeSection === item.id ? 'scale(1.3)' : 'scale(1)',
+                }}
+              >
+                {item.label}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* 右側：言語切替ボタン */}
+        <div className="navbar-right" style={{ display: 'flex', alignItems: 'center' }}>
+          <LanguageSwitcher />
+        </div>
       </motion.nav>
     </>
   );

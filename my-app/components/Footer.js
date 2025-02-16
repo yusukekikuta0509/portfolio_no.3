@@ -6,7 +6,8 @@ const Footer = () => {
           textAlign: 'center',
           padding: '20px',
           borderTop: '1px solid #ccc',
-          marginTop: '20px'
+          marginTop: '20px',
+          fontFamily: "'Josefin Sans', sans-serif",
         }}
       >
         <p>© 2025 yusukekikuta. All rights reserved. License: MIT</p>

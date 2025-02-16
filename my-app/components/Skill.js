@@ -21,14 +21,11 @@ const Skills = ({ lang = 'en' }) => {
       labels: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'Python', 'PHP'],
       data: [95, 90, 90, 80, 95, 50],
     },
-    "Frontend Frameworks": {
-      labels: ['React', 'Vite', 'Tailwind CSS', 'Next.js', 'Node.js', 'Framer Motion'],
-      data: [90, 80, 90, 75, 70, 80],
+    "Frameworks": {
+      labels: ['React', 'Vite', 'Tailwind CSS', 'Next.js', 'Node.js', 'Framer Motion', 'Django', 'Flask', 'FastAPI'],
+      data: [90, 80, 90, 75, 70, 80, 65, 80, 80],
     },
-    "Backend Frameworks": {
-      labels: ['Django', 'Flask', 'FastAPI'],
-      data: [65, 80, 80],
-    },
+   
     "AI & Specialized Skills": {
       labels: ['Prompt Engineering', 'AI Integration', 'API Development & Integration'],
       data: [85, 80, 90],

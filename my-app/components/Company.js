@@ -39,7 +39,7 @@ const Company = () => {
         </div>
       ) : (
         <p style={{ textAlign: 'center', fontSize: '1.2rem', color: '#666' }}>
-          お仕事のご依頼はコンタクトフォームからお願いします。
+          For business inquiries, please use the contact form!
         </p>
       )}
     </motion.section>

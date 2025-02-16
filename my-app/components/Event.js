@@ -1,20 +1,30 @@
 // components/Event.js
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const events = [
   {
     id: 1,
-    title: 'React19の新機能「Actions」で\n状態管理をシンプルに',
-    description: 'React 19の新機能「Actions」\nを使って状態管理をシンプルにする方法を紹介しました。',
+    title: {
+      ja: "React19の新機能「Actions」で\n状態管理をシンプルに",
+      en: "Simplifying state management with React 19's new 'Actions' feature",
+    },
+    description: {
+      ja: "React 19の新機能「Actions」\nを使って状態管理をシンプルにする方法を紹介しました。",
+      en: "We introduced a method to simplify state management using React 19's new 'Actions' feature.",
+    },
     image: '/react19.png',
-    url: 'https://zenn.dev/yusukekikuta/articles/1a3a47632264c0', // ← 遷移先の Zenn 記事 URL を指定
+    url: 'https://zenn.dev/yusukekikuta/articles/1a3a47632264c0', // Zenn 記事へのリンク
   },
-  // 今後イベントが増える場合はこの配列にオブジェクトを追加してください
+  // 今後イベントが増える場合はここにオブジェクトを追加してください
 ];
 
 const Event = () => {
-  // 表示するスライド数（3枚以上の場合は3枚表示、それ以外はイベント数）
+  const { i18n, t } = useTranslation();
+  const currentLang = i18n.language; // 'ja' または 'en'
+
+  // 表示するスライド数
   const visibleSlides = events.length >= 3 ? 3 : events.length;
   // 初期の中央インデックス。3枚の場合は中央の1枚目（0-indexed: 1）に設定
   const initialIndex = events.length === 3 ? 1 : 0;
@@ -52,7 +62,7 @@ const Event = () => {
 
   // 1枚あたりの幅（パーセント）
   const slideWidthPercent = 100 / visibleSlides;
-  // 全体の横幅（すべてのカードを並べたときの幅）
+  // 全体の横幅（全カードを並べたときの幅）
   const totalWidthPercent = (events.length * 100) / visibleSlides;
 
   // 中央寄せのオフセット計算
@@ -65,7 +75,6 @@ const Event = () => {
   // 1枚の場合は offset = 0
 
   return (
-    
     <motion.section
       id="event"
       className="event-section"
@@ -73,7 +82,8 @@ const Event = () => {
       whileInView={{ opacity: 1, x: 0, transition: { duration: 0.8, ease: 'easeOut' } }}
       viewport={{ once: true, amount: 0.3 }}
     >
-      <h2 className="section-title">Event</h2>
+      {/* 固定部分は i18n から取得可能なキーで表示（ここでは例として 'sectionTitleEvent' を使用） */}
+      <h2 className="section-title">{t('sectionTitleEvent', 'Event')}</h2>
       <div className="carousel-container">
         <div className="carousel-wrapper">
           <motion.div
@@ -92,7 +102,6 @@ const Event = () => {
                 className="carousel-item"
                 style={{ flex: '0 0 auto', width: `${slideWidthPercent}%`, padding: '0 10px' }}
               >
-                {/* カード全体をクリック可能にし、外部リンクに遷移 */}
                 <a
                   href={event.url}
                   target="_blank"
@@ -104,7 +113,11 @@ const Event = () => {
                       <div className="event-card-image">
                         <img
                           src={event.image}
-                          alt={event.title}
+                          alt={
+                            typeof event.title === 'object'
+                              ? event.title[currentLang]
+                              : event.title
+                          }
                           style={{
                             width: '100%',
                             height: 'auto',
@@ -115,21 +128,28 @@ const Event = () => {
                         />
                       </div>
                     )}
-                    <h3 className="event-card-title"style={{ whiteSpace: 'pre-wrap' }}>{event.title}</h3>
+                    <h3
+                      className="event-card-title"
+                      style={{ whiteSpace: 'pre-wrap' }}
+                    >
+                      {typeof event.title === 'object'
+                        ? event.title[currentLang]
+                        : event.title}
+                    </h3>
                     <p
-                        className="event-card-description"
-                        style={{ whiteSpace: 'pre-wrap' }}
-                      >
-                        {event.description}
-                      </p>
-
+                      className="event-card-description"
+                      style={{ whiteSpace: 'pre-wrap' }}
+                    >
+                      {typeof event.description === 'object'
+                        ? event.description[currentLang]
+                        : event.description}
+                    </p>
                   </div>
                 </a>
               </div>
             ))}
           </motion.div>
         </div>
-        {/* ナビゲーションボタンは、イベント数が表示枚数より多い場合のみ表示 */}
         {events.length > visibleSlides && (
           <>
             <button className="carousel-button prev" onClick={goPrev}>
@@ -142,13 +162,11 @@ const Event = () => {
         )}
       </div>
       <style jsx>{`
-      
         .event-section {
           padding: 50px 20px;
           background-color: #f7f7f7;
           position: relative;
         }
-        
         .carousel-container {
           position: relative;
           overflow: hidden;
@@ -220,8 +238,6 @@ const Event = () => {
         }
         .carousel-button.next {
           right: 10px;
-        
-          
         }
       `}</style>
     </motion.section>

@@ -1,3 +1,4 @@
+// pages/api/contact.js
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
@@ -18,11 +19,17 @@ export default async function handler(req, res) {
 
   try {
     const mailOptions = {
-      from: process.env.EMAIL_USER, // または EMAIL_FROM を利用
+      // 固定の送信元アドレスを使用する
+      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+      // ユーザーのメールアドレスを replyTo に設定する
+      replyTo: email,
       to: 'yusukekikuta.05@gmail.com',
       subject: '企業様のお問い合わせ',
-      text: message.slice(0, 500), // 500文字まで
-      html: `<p>${message.slice(0, 500)}</p>`,
+      text: `【お名前】 ${name}\n【メールアドレス】 ${email}\n【お問い合わせ内容】\n${message.slice(0, 500)}`,
+      html: `<p><strong>お名前:</strong> ${name}</p>
+             <p><strong>メールアドレス:</strong> ${email}</p>
+             <p><strong>お問い合わせ内容:</strong></p>
+             <p>${message.slice(0, 500)}</p>`,
     };
 
     const info = await transporter.sendMail(mailOptions);

@@ -5,12 +5,12 @@ import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { LanguageProvider, useLanguage } from '../context/LanguageContext';
 import { AnimatePresence, motion } from 'framer-motion';
 
-function AnimatedComponent({ Component, pageProps }) {
+function AppContent({ Component, pageProps }) {
   const { language } = useLanguage();
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={language} // 言語が変わると key が変わるので再描画される
+        key={language} // 言語が変わるとキーが変わるので再描画
         initial={{ filter: 'blur(8px)', opacity: 0 }}
         animate={{ filter: 'blur(0px)', opacity: 1 }}
         exit={{ filter: 'blur(8px)', opacity: 0 }}
@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }) {
     <div className={`${body_font.variable} ${display_font.variable}`}>
       <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}>
         <LanguageProvider>
-          <AnimatedComponent Component={Component} pageProps={pageProps} />
+          <AppContent Component={Component} pageProps={pageProps} />
         </LanguageProvider>
       </GoogleReCaptchaProvider>
     </div>

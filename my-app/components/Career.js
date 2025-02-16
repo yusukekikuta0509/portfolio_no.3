@@ -1,27 +1,13 @@
 // components/Career.js
 import React from 'react';
 import { motion } from 'framer-motion';
-
-const careerData = [
-  { year: '2005年', description: '埼玉県に誕生' },
-  { year: '2013年', description: 'トランペットに出会い専門的に音楽を学ぶ' },
-  { year: '2018年', description: '中高一貫の中学校に進学' },
-  { year: '2021年', description: '音楽科の高校で音楽を専門的に学ぶ' },
-  {
-    year: '2024年 春',
-    description:
-      '日本大学芸術学部音楽学科に進学。同時期に一人暮らしを始め、音楽と仕事の両立に違和感を覚える',
-  },
-  { year: '2024年 6月', description: 'プログラミングの学習を独学で開始' },
-  { year: '2024年 11月', description: 'エンジニアインターンに合格して大学を休学' },
-  { year: '現在', description: '大学は退学してフリーランスエンジニアとして、業務委託の案件を受託' },
-];
+import { useTranslation } from 'react-i18next';
 
 const listVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.5, // 各項目の開始間隔（秒）
+      staggerChildren: 0.5,
     },
   },
 };
@@ -32,9 +18,16 @@ const itemVariants = {
 };
 
 const Career = () => {
+  const { t } = useTranslation();
+
+  // returnObjects: true を指定してキャリア項目を取得
+  const careerItems = t('careerItems', { returnObjects: true });
+  // 万が一配列でない場合は空配列にフォールバック
+  const items = Array.isArray(careerItems) ? careerItems : [];
+
   return (
     <section id="career" style={{ padding: '50px 20px' }}>
-      <h2 className="section-title">Career</h2>
+      <h2 className="section-title">{t('sectionTitleCareer')}</h2>
       <div
         className="career-timeline japanese"
         style={{
@@ -61,27 +54,12 @@ const Career = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 1 }}
-          style={{
-            listStyle: 'none',
-            margin: 0,
-            padding: 0,
-          }}
+          style={{ listStyle: 'none', margin: 0, padding: 0 }}
         >
-          {careerData.map((item, index) => (
-            <motion.li
-              key={index}
-              variants={itemVariants}
-              style={{ marginBottom: '30px' }}
-            >
-              <span
-                className="year"
-                style={{ fontWeight: 'bold', marginRight: '10px' }}
-              >
-                {item.year}
-              </span>
-              <span className="description" style={{ fontSize: '1rem' }}>
-                {item.description}
-              </span>
+          {items.map((item, index) => (
+            <motion.li key={index} variants={itemVariants} style={{ marginBottom: '30px' }}>
+              <span style={{ fontWeight: 'bold', marginRight: '10px' }}>{item.year}</span>
+              <span style={{ fontSize: '1rem' }}>{item.description}</span>
             </motion.li>
           ))}
         </motion.ul>
