@@ -7,30 +7,27 @@
   font-family: var(--body-font), sans-serif;
 }
 
-
-
 h1, h2, h3 {
   font-family: var(--display-font), serif;
 }
 
-/* 日本語用は、明朝体からモダンなフォントに変更する場合 */
+/* 日本語用フォント */
 .japanese {
   font-family: 'Noto Sans JP', sans-serif;
-  /* もしくは、M PLUS Rounded 1c に変更する場合は:
-  font-family: 'M PLUS Rounded 1c', sans-serif;
-  */
 }
 
-/* styles/global.css など */
+/* セクションタイトル */
 .section-title {
   font-size: 3rem;
   margin-bottom: 30px;
   text-align: center;
 }
 
+/* h3の日本語の場合 */
 h3:lang(ja) {
   font-family: "Yu Gothic", "Hiragino Kaku Gothic Pro", "Meiryo", sans-serif;
 }
+
 /* セクション全体 */
 .event-section {
   padding: 50px 20px;
@@ -38,7 +35,7 @@ h3:lang(ja) {
   position: relative;
 }
 
-/* セクションタイトル：ゴシック体に変更 */
+/* セクションタイトル：ゴシック体 */
 .event-section-title {
   text-align: center;
   font-family: 'Helvetica Neue', 'Yu Gothic', sans-serif;
@@ -55,7 +52,8 @@ h3:lang(ja) {
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 300px;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
 }
 
@@ -79,20 +77,7 @@ h3:lang(ja) {
   color: #666;
 }
 
-/* 2枚の場合のレイアウト */
-.event-two-layout {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-/* 1枚の場合のレイアウト */
-.event-one-layout {
-  display: flex;
-  justify-content: center;
-}
-
-/* Swiper のデフォルトナビゲーションボタンの上書き */
+/* Swiper のナビゲーションボタン */
 .event-swiper .swiper-button-prev,
 .event-swiper .swiper-button-next {
   background-color: #888;
@@ -108,13 +93,33 @@ h3:lang(ja) {
   font-size: 1.5rem;
   font-weight: bold;
 }
-
-/* ナビゲーションボタンのホバー時 */
 .event-swiper .swiper-button-prev:hover,
 .event-swiper .swiper-button-next:hover {
   background-color: #aaa;
 }
 
-  /* その他、必要なグローバルスタイルを追加 */
-  
-  
+/* ----- レスポンシブ対応 ----- */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  .event-section {
+    padding: 30px 10px;
+  }
+  .event-card {
+    width: 90%;
+    padding: 15px;
+  }
+  .event-card-title,
+  .event-card-description {
+    text-align: center;
+  }
+  /* Skillセクションのチャートコンテナがあれば、以下も調整 */
+  .skill-chart-container {
+    max-width: 100%;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

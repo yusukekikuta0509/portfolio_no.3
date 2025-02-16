@@ -1,10 +1,9 @@
-// pages/api/contact.js
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: Number(process.env.EMAIL_PORT),
-  secure: process.env.EMAIL_SECURE === 'true', // 'true' の文字列に注意
+  secure: process.env.EMAIL_SECURE === 'true',
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -19,17 +18,13 @@ export default async function handler(req, res) {
 
   try {
     const mailOptions = {
-      // 固定の送信元アドレスを使用する
-      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
-      // ユーザーのメールアドレスを replyTo に設定する
-      replyTo: email,
+      from: process.env.EMAIL_USER,
       to: 'yusukekikuta.05@gmail.com',
       subject: '企業様のお問い合わせ',
-      text: `【お名前】 ${name}\n【メールアドレス】 ${email}\n【お問い合わせ内容】\n${message.slice(0, 500)}`,
-      html: `<p><strong>お名前:</strong> ${name}</p>
-             <p><strong>メールアドレス:</strong> ${email}</p>
-             <p><strong>お問い合わせ内容:</strong></p>
-             <p>${message.slice(0, 500)}</p>`,
+      text: `Name: ${name}\nEmail: ${email}\nMessage:\n${message.slice(0, 1000)}`,
+      html: `<p><strong>Name:</strong> ${name}</p>
+             <p><strong>Email:</strong> ${email}</p>
+             <p>${message.slice(0, 1000)}</p>`,
     };
 
     const info = await transporter.sendMail(mailOptions);

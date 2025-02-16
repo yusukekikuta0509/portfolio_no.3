@@ -1,8 +1,10 @@
 // components/Company.js
 import React from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const companies = [
+  // 例として1社分のデータを追加（必要に応じて追加してください）
   
 ];
 
@@ -29,11 +31,16 @@ const Company = () => {
         >
           {companies.map((company) => (
             <a key={company.id} href={company.url} target="_blank" rel="noopener noreferrer">
-              <img
-                src={company.logo}
-                alt={company.name}
-                style={{ width: '150px', height: 'auto', objectFit: 'contain' }}
-              />
+              <div style={{ width: '150px', position: 'relative' }}>
+                <Image
+                  src={company.logo}
+                  alt={company.name}
+                  layout="responsive"
+                  width={150}
+                  height={100} // 高さは画像に合わせて調整してください
+                  objectFit="contain"
+                />
+              </div>
             </a>
           ))}
         </div>
