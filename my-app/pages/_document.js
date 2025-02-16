@@ -6,14 +6,13 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          {/* Josefin Sans の読み込み */}
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
           <link
             href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap"
             rel="stylesheet"
           />
-          {/* You can also remove any other conflicting font links here */}
+          {/* 他のフォントもここに記述 */}
         </Head>
         <body>
           <Main />

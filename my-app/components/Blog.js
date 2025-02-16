@@ -31,7 +31,7 @@ const Blog = ({ articles = [] }) => {
         {language === 'en' ? (
           // 英語の場合は固定メッセージを表示
           <p className="text-center text-gray-600">
-            We apologize, but this section is linked to the Japanese tech blog platform "Zenn" and the English version of articles is not available yet.
+            We apologize, but this section is linked to the Japanese tech blog platform Zenn and the English version of articles is not available yet.
             (We will implement this functionality when we post on Medium, so please wait until then.)
           </p>
         ) : (

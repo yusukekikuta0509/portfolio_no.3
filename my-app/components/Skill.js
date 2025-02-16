@@ -15,7 +15,7 @@ import ChartCard from './ChartCard';
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
 
-const Skills = ({ lang = 'en' }) => {
+const Skills = () => {
   const categories = {
     "Programming Languages": {
       labels: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'Python', 'PHP'],

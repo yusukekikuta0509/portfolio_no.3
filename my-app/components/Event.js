@@ -1,68 +1,45 @@
 // components/Event.js
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
 
 const events = [
   {
     id: 1,
-    title: {
-      ja: "React19の新機能「Actions」で\n状態管理をシンプルに",
-      en: "Simplifying state management with React 19's new 'Actions' feature",
-    },
-    description: {
-      ja: "React 19の新機能「Actions」\nを使って状態管理をシンプルにする方法を紹介しました。",
-      en: "We introduced a method to simplify state management using React 19's new 'Actions' feature.",
-    },
+    title: 'React19の新機能「Actions」で\n状態管理をシンプルに',
+    description: 'React 19の新機能「Actions」\nを使って状態管理をシンプルにする方法を紹介しました。',
     image: '/react19.png',
-    url: 'https://zenn.dev/yusukekikuta/articles/1a3a47632264c0', // Zenn 記事へのリンク
+    url: 'https://zenn.dev/yusukekikuta/articles/1a3a47632264c0',
   },
-  // 今後イベントが増える場合はここにオブジェクトを追加してください
+  // 他のイベントデータ...
 ];
 
 const Event = () => {
-  const { i18n, t } = useTranslation();
-  const currentLang = i18n.language; // 'ja' または 'en'
-
-  // 表示するスライド数
+  // 表示するスライド数（3枚以上の場合は3枚表示、それ以外はイベント数）
   const visibleSlides = events.length >= 3 ? 3 : events.length;
   // 初期の中央インデックス。3枚の場合は中央の1枚目（0-indexed: 1）に設定
   const initialIndex = events.length === 3 ? 1 : 0;
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const slideIntervalRef = useRef(null);
 
-  // 自動スライド（4秒ごとに次のカードへ）
-  useEffect(() => {
-    startAutoSlide();
-    return () => stopAutoSlide();
-  }, [currentIndex]);
-
-  const startAutoSlide = () => {
-    stopAutoSlide();
-    slideIntervalRef.current = setInterval(() => {
-      goNext();
-    }, 4000);
-  };
-
-  const stopAutoSlide = () => {
-    if (slideIntervalRef.current) {
-      clearInterval(slideIntervalRef.current);
-    }
-  };
-
-  const goPrev = () => {
-    const newIndex = currentIndex === 0 ? events.length - 1 : currentIndex - 1;
-    setCurrentIndex(newIndex);
-  };
-
-  const goNext = () => {
+  // goNext 関数は useCallback で定義して依存関係に入れる
+  const goNext = useCallback(() => {
     const newIndex = currentIndex === events.length - 1 ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
-  };
+  }, [currentIndex, events.length]);
+
+  // 自動スライド（4秒ごとに次のカードへ）
+  useEffect(() => {
+    // 自動スライドを開始
+    slideIntervalRef.current = setInterval(goNext, 4000);
+    return () => {
+      if (slideIntervalRef.current) clearInterval(slideIntervalRef.current);
+    };
+  }, [goNext]);
 
   // 1枚あたりの幅（パーセント）
   const slideWidthPercent = 100 / visibleSlides;
-  // 全体の横幅（全カードを並べたときの幅）
+  // 全体の横幅（すべてのカードを並べたときの幅）
   const totalWidthPercent = (events.length * 100) / visibleSlides;
 
   // 中央寄せのオフセット計算
@@ -82,8 +59,7 @@ const Event = () => {
       whileInView={{ opacity: 1, x: 0, transition: { duration: 0.8, ease: 'easeOut' } }}
       viewport={{ once: true, amount: 0.3 }}
     >
-      {/* 固定部分は i18n から取得可能なキーで表示（ここでは例として 'sectionTitleEvent' を使用） */}
-      <h2 className="section-title">{t('sectionTitleEvent', 'Event')}</h2>
+      <h2 className="section-title">Event</h2>
       <div className="carousel-container">
         <div className="carousel-wrapper">
           <motion.div
@@ -111,38 +87,21 @@ const Event = () => {
                   <div className="event-card">
                     {event.image && (
                       <div className="event-card-image">
-                        <img
+                        <Image
                           src={event.image}
-                          alt={
-                            typeof event.title === 'object'
-                              ? event.title[currentLang]
-                              : event.title
-                          }
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                            borderRadius: '4px',
-                            objectFit: 'cover',
-                            marginBottom: '15px',
-                          }}
+                          alt={event.title}
+                          layout="responsive"
+                          width={300}
+                          height={200}
+                          objectFit="cover"
                         />
                       </div>
                     )}
-                    <h3
-                      className="event-card-title"
-                      style={{ whiteSpace: 'pre-wrap' }}
-                    >
-                      {typeof event.title === 'object'
-                        ? event.title[currentLang]
-                        : event.title}
+                    <h3 className="event-card-title" style={{ whiteSpace: 'pre-wrap' }}>
+                      {event.title}
                     </h3>
-                    <p
-                      className="event-card-description"
-                      style={{ whiteSpace: 'pre-wrap' }}
-                    >
-                      {typeof event.description === 'object'
-                        ? event.description[currentLang]
-                        : event.description}
+                    <p className="event-card-description" style={{ whiteSpace: 'pre-wrap' }}>
+                      {event.description}
                     </p>
                   </div>
                 </a>
@@ -152,7 +111,10 @@ const Event = () => {
         </div>
         {events.length > visibleSlides && (
           <>
-            <button className="carousel-button prev" onClick={goPrev}>
+            <button className="carousel-button prev" onClick={() => {
+              const newIndex = currentIndex === 0 ? events.length - 1 : currentIndex - 1;
+              setCurrentIndex(newIndex);
+            }}>
               {'<'}
             </button>
             <button className="carousel-button next" onClick={goNext}>
@@ -197,11 +159,7 @@ const Event = () => {
         .event-card:hover {
           transform: scale(1.03);
         }
-        .event-card-image img {
-          width: 100%;
-          height: auto;
-          border-radius: 4px;
-          object-fit: cover;
+        .event-card-image {
           margin-bottom: 15px;
         }
         .event-card-title {
