@@ -17,6 +17,18 @@ const MobileWarning = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // スクロールロックの設定
+  useEffect(() => {
+    if (isMobile) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobile]);
+
   if (!isMobile) return null;
 
   return (
@@ -30,13 +42,18 @@ const MobileWarning = () => {
       color: '#fff',
       zIndex: 9999,
       display: 'flex',
+      flexDirection: 'column',  // 縦並びに変更
       alignItems: 'center',
       justifyContent: 'center',
       textAlign: 'center',
       padding: '20px'
     }}>
-      <p style={{ fontSize: '1.5rem' }}>現在スマホではご確認いただけません。PCでご確認ください。</p>
-      <p style={{ fontSize: '1.5rem' }}>Currently, this site is not available on smartphones. Please view it on a PC.</p>
+      <p style={{ fontSize: '1.2rem', margin: '0.5rem 0' }}>
+        現在スマホではご確認いただけません。PCでご確認ください。
+      </p>
+      <p style={{ fontSize: '1.2rem', margin: '0.5rem 0' }}>
+        Currently, this site is not available on smartphones. Please view it on a PC.
+      </p>
     </div>
   );
 };
