@@ -4,6 +4,7 @@ import '../styles/globals.css';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { LanguageProvider, useLanguage } from '../context/LanguageContext';
 import { AnimatePresence, motion } from 'framer-motion';
+import MobileWarning from '../components/MobileWarning';
 
 function AppContent({ Component, pageProps }) {
   const { language } = useLanguage();
@@ -25,11 +26,12 @@ function AppContent({ Component, pageProps }) {
 function MyApp({ Component, pageProps }) {
   return (
     <div className={`${body_font.variable} ${display_font.variable}`}>
-      <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}>
-        <LanguageProvider>
-          <AppContent Component={Component} pageProps={pageProps} />
-        </LanguageProvider>
-      </GoogleReCaptchaProvider>
+    <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}>
+      <LanguageProvider>
+        <Component {...pageProps} />
+        <MobileWarning />
+      </LanguageProvider>
+    </GoogleReCaptchaProvider>
     </div>
   );
 }
