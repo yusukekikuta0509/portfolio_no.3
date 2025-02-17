@@ -65,7 +65,7 @@ const resources = {
       sendError: "There was an error sending your message. Please try again later.",
       modalSuccess: "Your message has been sent successfully. We will reply from yusukekikuta.05@gmail.com within 2-3 business days.",
       modalCountdown: " seconds until automatically closed."
-    
+      
       
     }
   },
