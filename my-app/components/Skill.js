@@ -25,7 +25,6 @@ const Skills = () => {
       labels: ['React', 'Vite', 'Tailwind CSS', 'Next.js', 'Node.js', 'Framer Motion', 'Django', 'Flask', 'FastAPI'],
       data: [90, 80, 90, 75, 70, 80, 65, 80, 80],
     },
-   
     "AI & Specialized Skills": {
       labels: ['Prompt Engineering', 'AI Integration', 'API Development & Integration'],
       data: [85, 80, 90],
@@ -44,8 +43,8 @@ const Skills = () => {
       {
         label: 'Skill Level (%)',
         data: categories[activeCategory].data,
-        backgroundColor: 'rgba(0, 0, 0, 0.1)',   // 薄い黒（モノクロ）
-        borderColor: 'rgba(0, 0, 0, 1)',           // 黒
+        backgroundColor: 'rgba(0, 0, 0, 0.1)', // 薄い黒（モノクロ）
+        borderColor: 'rgba(0, 0, 0, 1)',         // 黒
         borderWidth: 2,
         tension: 0.4,
         pointBackgroundColor: 'rgba(0, 0, 0, 1)',
@@ -106,14 +105,14 @@ const Skills = () => {
           text: 'Proficiency (%)',
           color: '#000',
           font: {
-            size: 22, // 縦軸のタイトルフォントサイズを大きく
+            size: 22,
             weight: '700',
           },
         },
         ticks: {
           color: '#000',
           font: {
-            size: 18, // 縦軸の目盛りのフォントサイズを大きく
+            size: 18,
           },
         },
         grid: {
@@ -124,7 +123,7 @@ const Skills = () => {
   };
 
   return (
-    <section id="skills" className="flex items-center justify-center min-h-screen bg-white py-32">
+    <section id="skills" className="flex items-center justify-center min-h-screen bg-white py-16 md:py-32">
       <motion.div
         className="max-w-5xl mx-auto px-4 text-center"
         initial={{ opacity: 0, y: 20 }}
@@ -133,11 +132,11 @@ const Skills = () => {
         viewport={{ once: true }}
       >
         <h2 className="section-title">Skills</h2>
-        <div className="flex justify-center space-x-8 mb-12">
+        <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-12">
           {Object.keys(categories).map((category) => (
             <button
               key={category}
-              className={`px-8 py-4 rounded-full shadow-lg font-medium transition duration-300 transform ${
+              className={`px-4 py-2 md:px-8 md:py-4 rounded-full shadow-lg font-medium transition duration-300 transform ${
                 activeCategory === category 
                   ? 'bg-black text-white'
                   : 'bg-gray-200 text-black hover:bg-gray-300'

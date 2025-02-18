@@ -106,27 +106,59 @@ h3:lang(ja) {
 }
 
 /* ----- レスポンシブ対応 ----- */
-@media (max-width: 768px) {
+
+
+
+@media (max-width: 640px) {
   .section-title {
-    font-size: 2rem;
-    margin-bottom: 20px;
+    font-size: 24px;      /* 文字を小さく */
+    margin-left: 20px;    /* 左右にマージンを設定 */
+    margin-right: 20px;
+    margin-bottom: 15px;  /* 縦の余白を狭める */
   }
-  .event-section {
-    padding: 30px 10px;
+  p.text-gray-800.text-xl {
+    color: #1F2937;    /* Tailwind の text-gray-800 に相当する色 */
+    font-size: 13px;  /* Tailwind の text-xl に相当するサイズ */
   }
-  .event-card {
-    width: 90%;
-    padding: 15px;
+  p.text-gray-600.text-lg {
+    font-size: 12px;  /* Tailwind の text-lg に相当するサイズ */
   }
-  .event-card-title,
-  .event-card-description {
-    text-align: center;
+  
+  .about-container {
+    /* 横並びを維持したい場合、無理やり固定幅にするなどの対策が必要 */
+    /* 例として横スクロールを有効にする */
+    overflow-x: auto;
   }
-  /* Skillセクションのチャートコンテナがあれば、以下も調整 */
-  .skill-chart-container {
-    max-width: 100%;
-    overflow: hidden;
-    margin-left: auto;
-    margin-right: auto;
+
+  .about-rounded-md {
+    width: 100px;   /* お好みの幅 */
+    height: 100px;  /* お好みの高さ */
   }
+  
+  html,
+  body {
+    overflow-x: hidden;
+  }
+  section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+
+  }
+  .navbar {
+    display: flex;
+    width: 400px;
+    align-items: center;
+    font-size: 1rem;
+  }
+  .navbar-center {
+    font-size: 1rem;
+    width: 100px;
+  }
+  .navbar-left {
+    width: 30px;
+    font-size: 10px;
+    height: 30px;
+}
 }

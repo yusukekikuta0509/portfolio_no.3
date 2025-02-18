@@ -12,9 +12,10 @@ const About = () => {
 
   return (
     <section id="about" className="py-12 px-4 padding-bottom-12">
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
+      <div className="max-w-5xl mx-auto flex flex-row justify-center items-center gap-8">
+        {/* 親要素にカスタムクラス "about-rounded-md" を追加 */}
         <motion.div 
-          className="w-48 h-48 relative overflow-hidden"
+          className="about-rounded-md relative overflow-hidden"
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
@@ -51,7 +52,6 @@ const About = () => {
               <FaGithub size={40} />
             </a>
           </div>
-          
           <button 
             onClick={toggleExpanded}
             className="mt-4 px-6 py-3 bg-black text-white rounded transition-colors hover:bg-gray-800 text-lg"

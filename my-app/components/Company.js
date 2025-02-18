@@ -4,12 +4,11 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 const companies = [
-  // 例として1社分のデータを追加（必要に応じて追加してください）
   {
     id: 1,
     name: 'A.I Consulting',
-    logo: '/Logo.png', // public/companyA.png に配置
-    url: 'https://companyA.com',
+    logo: '/Logo.png',
+    url: 'https://aiconsulting.co.jp/',
   },
 ];
 
@@ -24,42 +23,38 @@ const Company = () => {
       style={{ padding: '50px 20px', backgroundColor: '#fff' }}
     >
       <h2 className="section-title">Company</h2>
-      <p style={{
+      <p
+        style={{
           textAlign: 'center',
           padding: '40px',
           fontSize: '24px',
           marginBottom: '20px',
           fontFamily: "'Josefin Sans', sans-serif",
-        }}>Partner Companies</p>
+        }}
+      >
+        Partner Companies
+      </p>
       
       {companies.length > 0 ? (
         <div
-          className="company-logos"
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '40px',
-            flexWrap: 'wrap',
-          }}
+          className="company-logos flex justify-center gap-10 flex-wrap"
         >
           {companies.map((company) => (
             <a key={company.id} href={company.url} target="_blank" rel="noopener noreferrer">
-              <div style={{ width: '400px', position: 'relative' }}>
+              {/* ここで Tailwind のレスポンシブクラスを使用してサイズを変更 */}
+              <div className="relative w-64 md:w-[400px]">
                 <Image
                   src={company.logo}
                   alt={company.name}
                   layout="responsive"
                   width={150}
-                  height={260} // 高さは画像に合わせて調整してください
+                  height={260}
                   objectFit="contain"
                 />
-                
               </div>
             </a>
           ))}
-          
         </div>
-        
       ) : (
         <p style={{ textAlign: 'center', fontSize: '1.2rem', color: '#666' }}>
           For business inquiries, please use the contact form!

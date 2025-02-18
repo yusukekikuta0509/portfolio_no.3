@@ -4,7 +4,7 @@ import '../styles/globals.css';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { LanguageProvider, useLanguage } from '../context/LanguageContext';
 import { AnimatePresence, motion } from 'framer-motion';
-import MobileWarning from '../components/MobileWarning';
+// import MobileWarning from '../components/MobileWarning';
 
 function AppContent({ Component, pageProps }) {
   const { language } = useLanguage();
@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }) {
         <LanguageProvider>
           {/* AppContent を使って、言語切替時のアニメーションを適用 */}
           <AppContent Component={Component} pageProps={pageProps} />
-          <MobileWarning />
+          {/* <MobileWarning /> */}
         </LanguageProvider>
       </GoogleReCaptchaProvider>
     </div>

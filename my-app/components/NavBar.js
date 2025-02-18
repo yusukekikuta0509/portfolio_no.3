@@ -1,6 +1,6 @@
 // components/NavBar.js
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import LanguageSwitcher from './LanguageSwitcher';
 
 const navItems = [
@@ -17,8 +17,9 @@ const navItems = [
 const NavBar = () => {
   const [activeSection, setActiveSection] = useState(null);
   const [headerVisible, setHeaderVisible] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // About セクション到達後、固定表示（すでに表示済みなら常に表示）
+  // About セクション到達後、固定表示
   useEffect(() => {
     const aboutSection = document.getElementById('about');
     if (!aboutSection) return;
@@ -26,6 +27,8 @@ const NavBar = () => {
     const handleScroll = () => {
       if (window.pageYOffset >= threshold) {
         setHeaderVisible(true);
+      } else {
+        setHeaderVisible(false);
       }
     };
     handleScroll();
@@ -33,7 +36,7 @@ const NavBar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 各セクションの表示状況の更新（必要なら IntersectionObserver を利用）
+  // 各セクションの表示状況を IntersectionObserver で監視
   useEffect(() => {
     const observerOptions = {
       root: null,
@@ -59,71 +62,123 @@ const NavBar = () => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+      // モバイルメニューが開いていたら閉じる
+      setIsMobileMenuOpen(false);
     }
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen((prev) => !prev);
+  };
+
   return (
-    <motion.nav
-      className="navbar"
-      initial={{ y: -150, opacity: 0 }}
-      animate={{ y: headerVisible ? 0 : -150, opacity: headerVisible ? 1 : 0 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '80px',
-        backgroundColor: '#fff',
-        zIndex: 1000,
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 40px',
-      }}
-    >
-      <div className="navbar-left">
-        <h1
-          style={{
-            margin: 0,
-            fontSize: '1.5rem',
-            fontFamily: "'Josefin Sans', sans-serif",
-          }}
-        >
-          Yusuke Kikuta&apos;s Portfolio
-        </h1>
-      </div>
-      <div className="navbar-center">
-        <ul
-          style={{
-            display: 'flex',
-            listStyle: 'none',
-            margin: 0,
-            padding: 0,
-            gap: '20px',
-            fontFamily: "'Josefin Sans', sans-serif",
-          }}
-        >
-          {navItems.map((item) => (
-            <li
-              key={item.id}
-              onClick={() => handleNavClick(item.id)}
-              style={{
-                cursor: 'pointer',
-                transition: 'transform 0.3s',
-                transform: activeSection === item.id ? 'scale(1.3)' : 'scale(1)',
-              }}
-            >
-              {item.label}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="navbar-right">
-        <LanguageSwitcher />
-      </div>
-    </motion.nav>
+    <div className="navbar-container">
+      {/* ナビバー本体：PC用レイアウトは md: 以降で表示 */}
+      <motion.nav
+        className="navbar fixed top-0 left-0 right-0 h-20 bg-white z-[1000] shadow flex items-center justify-between px-5"
+        initial={{ y: -150, opacity: 0 }}
+        animate={{ y: headerVisible ? 0 : -150, opacity: headerVisible ? 1 : 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+      >
+        <div className="flex items-center w-full">
+          {/* タイトル：常に表示 */}
+          <div className="flex-shrink-0">
+            <h1 className="text-xl font-josefin">
+              Yusuke Kikuta&apos;s Portfolio
+            </h1>
+          </div>
+          {/* PC用ナビ： md: で表示、モバイルでは非表示 */}
+          <div className="hidden md:flex md:items-center md:space-x-5 ml-auto">
+            <ul className="flex list-none m-0 p-0 gap-5 font-josefin">
+              {navItems.map((item) => (
+                <li
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className="cursor-pointer transition-transform duration-300 hover:scale-110"
+                  style={{
+                    transform: activeSection === item.id ? 'scale(1.3)' : 'scale(1)',
+                  }}
+                >
+                  {item.label}
+                </li>
+              ))}
+            </ul>
+            <div className="ml-5">
+              <LanguageSwitcher />
+            </div>
+          </div>
+          {/* モバイル用ハンバーガーメニュー： md: で非表示 */}
+          <div className="flex md:hidden ml-auto">
+            <button onClick={toggleMobileMenu} className="p-2">
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </motion.nav>
+
+      {/* モバイル用メニューオーバーレイ（AnimatePresence を追加） */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            className="fixed inset-0 bg-white z-[1100] flex flex-col items-center justify-start pt-10"
+            initial={{ opacity: 0, y: '-20%' }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: '-20%' }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
+          >
+            {/* 閉じるボタン */}
+            <button onClick={toggleMobileMenu} className="absolute top-5 right-5 p-2">
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            {/* 縦並びのナビゲーションリスト */}
+            <ul className="flex flex-col gap-5 list-none m-0 p-0 text-2xl font-josefin">
+              {navItems.map((item) => (
+                <li
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className="cursor-pointer transition-transform duration-300 hover:scale-110"
+                  style={{
+                    transform: activeSection === item.id ? 'scale(1.3)' : 'scale(1)',
+                  }}
+                >
+                  {item.label}
+                </li>
+              ))}
+            </ul>
+            {/* 言語切替ボタン */}
+            <div className="mt-10">
+              <LanguageSwitcher />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 
