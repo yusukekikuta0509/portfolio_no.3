@@ -1,205 +1,131 @@
-// components/Event.js
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
+"use client"; 
+// Next.js (App Router) でクライアント側の処理を行うコンポーネントの場合は先頭に "use client" を書く
 
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+
+// イベントデータ
 const events = [
   {
     id: 1,
     title: 'React19の新機能「Actions」で\n状態管理をシンプルに',
-    description: 'React 19の新機能「Actions」\nを使って状態管理をシンプルにする方法を紹介しました。',
+    description:
+      'React 19の新機能「Actions」\nを使って状態管理をシンプルにする方法を紹介しました。',
     image: '/react19.png',
     url: 'https://zenn.dev/yusukekikuta/articles/1a3a47632264c0',
   },
-  // 他のイベントデータ...
+  {
+    id: 2,
+    title: 'Music Theory vs Counterpoint in Algorithms',
+    description: '音楽理論とアルゴリズムの親和性について登壇しました。',
+    image: '/zenncafe.jpg',
+    url: 'https://zenn.dev/yusukekikuta/articles/fc9248d773bc9d',
+  },
+  // 他のイベントデータを追加してもOK
 ];
 
-const Event = () => {
-  // 表示するスライド数（3枚以上の場合は3枚表示、それ以外はイベント数）
-  const visibleSlides = events.length >= 3 ? 3 : events.length;
-  // 初期の中央インデックス。3枚の場合は中央の1枚目（0-indexed: 1）に設定
-  const initialIndex = events.length === 3 ? 1 : 0;
-  const [currentIndex, setCurrentIndex] = useState(initialIndex);
-  const slideIntervalRef = useRef(null);
+export default function Event() {
+  // 現在表示しているスライドのインデックス
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  // goNext 関数は useCallback で定義して依存関係に入れる
-  const goNext = useCallback(() => {
-    const newIndex = currentIndex === events.length - 1 ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
-  }, [currentIndex, events.length]);
-
-  // 自動スライド（4秒ごとに次のカードへ）
+  // 4秒ごとに次のスライドへ切り替え（最後までいったら先頭に戻る）
   useEffect(() => {
-    // 自動スライドを開始
-    slideIntervalRef.current = setInterval(goNext, 4000);
-    return () => {
-      if (slideIntervalRef.current) clearInterval(slideIntervalRef.current);
-    };
-  }, [goNext]);
+    const timer = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % events.length);
+    }, 4000);
 
-  // 1枚あたりの幅（パーセント）
-  const slideWidthPercent = 100 / visibleSlides;
-  // 全体の横幅（すべてのカードを並べたときの幅）
-  const totalWidthPercent = (events.length * 100) / visibleSlides;
-
-  // 中央寄せのオフセット計算
-  let offset = currentIndex * slideWidthPercent;
-  if (visibleSlides === 2) {
-    offset = currentIndex * slideWidthPercent - (100 - slideWidthPercent) / 2;
-  } else if (visibleSlides === 3) {
-    offset = currentIndex * slideWidthPercent - slideWidthPercent;
-  }
-  // 1枚の場合は offset = 0
+    // コンポーネントがアンマウントされるときにインターバルを解除
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <motion.section
-      id="event"
-      className="event-section"
-      initial={{ opacity: 0, x: -100 }}
-      whileInView={{ opacity: 1, x: 0, transition: { duration: 0.8, ease: 'easeOut' } }}
-      viewport={{ once: true, amount: 0.3 }}
-    >
+    <section id="event" className="event-section">
       <h2 className="section-title">Event</h2>
-      <div className="carousel-container">
-        <div className="carousel-wrapper">
-          <motion.div
-            className="carousel-inner"
-            animate={{ x: `-${offset}%` }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            style={{
-              width: `${totalWidthPercent}%`,
-              display: 'flex',
-              flexDirection: 'row',
-            }}
+
+      {/* フェード切り替えのコンテナ。サイズは任意で変更可能です */}
+      <div className="relative w-full max-w-4xl h-[600px] mx-auto">
+        {/* イベント数だけループを回し、現在のインデックスのものだけをフェードイン表示 */}
+        {events.map((event, index) => (
+          <div
+            key={event.id}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              index === currentIndex ? "opacity-100" : "opacity-0"
+            }`}
           >
-            {events.map((event) => (
-              <div
-                key={event.id}
-                className="carousel-item"
-                style={{ flex: '0 0 auto', width: `${slideWidthPercent}%`, padding: '0 10px' }}
-              >
-                <a
-                  href={event.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                >
-                  <div className="event-card">
-                    {event.image && (
-                      <div className="event-card-image">
-                        <Image
-                          src={event.image}
-                          alt={event.title}
-                          layout="responsive"
-                          width={300}
-                          height={200}
-                          objectFit="cover"
-                        />
-                      </div>
-                    )}
-                    <h3 className="event-card-title" style={{ whiteSpace: 'pre-wrap' }}>
-                      {event.title}
-                    </h3>
-                    <p className="event-card-description" style={{ whiteSpace: 'pre-wrap' }}>
-                      {event.description}
-                    </p>
+            <a
+              href={event.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <div className="event-card">
+                {/* 画像が存在する場合のみ表示 */}
+                {event.image && (
+                  <div className="event-card-image">
+                    <Image
+                      src={event.image}
+                      alt={event.title}
+                      width={400}
+                      height={300}
+                      style={{ objectFit: "cover" }}
+                      className="border-4 border-black rounded-xl"
+                    />
                   </div>
-                </a>
+                )}
+                <h3 className="event-card-title" style={{ whiteSpace: "pre-wrap" }}>
+                  {event.title}
+                </h3>
+                <p className="event-card-description" style={{ whiteSpace: "pre-wrap" }}>
+                  {event.description}
+                </p>
               </div>
-            ))}
-          </motion.div>
-        </div>
-        {events.length > visibleSlides && (
-          <>
-            <button className="carousel-button prev" onClick={() => {
-              const newIndex = currentIndex === 0 ? events.length - 1 : currentIndex - 1;
-              setCurrentIndex(newIndex);
-            }}>
-              {'<'}
-            </button>
-            <button className="carousel-button next" onClick={goNext}>
-              {'>'}
-            </button>
-          </>
-        )}
+            </a>
+          </div>
+        ))}
       </div>
+
       <style jsx>{`
         .event-section {
           padding: 50px 20px;
           background-color: #f7f7f7;
           position: relative;
         }
-        .carousel-container {
-          position: relative;
-          overflow: hidden;
-        }
-        .carousel-wrapper {
-          width: 100%;
-          overflow: hidden;
-        }
-        .carousel-inner {
-          display: flex;
-          flex-direction: row;
-        }
-        .carousel-item {
-          flex-shrink: 0;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+        .section-title {
+          text-align: center;
+          margin-bottom: 30px;
         }
         .event-card {
+          /* カード全体のデザイン */
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
           background: #fff;
           border: 1px solid #ddd;
           border-radius: 8px;
-          padding: 20px;
+          padding: 40px;
+          margin: 0 auto;
+          width: 100%;
+          height: 100%;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-          text-align: center;
-          transition: transform 0.3s;
-        }
-        .event-card:hover {
-          transform: scale(1.03);
         }
         .event-card-image {
           margin-bottom: 15px;
         }
         .event-card-title {
-          font-family: 'Helvetica Neue', 'Yu Gothic', sans-serif;
+          font-family: "Helvetica Neue", "Yu Gothic", sans-serif;
           color: #333;
           margin-bottom: 10px;
+          font-size: 1.2rem;
+          font-weight: bold;
         }
         .event-card-description {
-          font-family: 'Helvetica Neue', 'Yu Gothic', sans-serif;
+          font-family: "Helvetica Neue", "Yu Gothic", sans-serif;
           color: #666;
-        }
-        .carousel-button {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          background-color: #888;
-          color: #fff;
-          border: none;
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
-          cursor: pointer;
-          z-index: 2;
-          opacity: 0.8;
-          font-size: 1.5rem;
-          line-height: 40px;
-          text-align: center;
-        }
-        .carousel-button:hover {
-          background-color: #aaa;
-        }
-        .carousel-button.prev {
-          left: 10px;
-        }
-        .carousel-button.next {
-          right: 10px;
+          font-size: 0.95rem;
         }
       `}</style>
-    </motion.section>
+    </section>
   );
-};
-
-export default Event;
+}

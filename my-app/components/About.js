@@ -13,14 +13,14 @@ const About = () => {
   return (
     <section id="about" className="py-12 px-4 padding-bottom-12">
       <div className="max-w-5xl mx-auto flex flex-row justify-center items-center gap-8">
-        {/* 親要素にカスタムクラス "about-rounded-md" を追加 */}
+        {/* 画像コンテナに固定サイズと flex-shrink-0 を追加 */}
         <motion.div 
-          className="about-rounded-md relative overflow-hidden"
+          className="about-rounded-md relative overflow-hidden w-64 h-64 flex-shrink-0"
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
           <Image 
-            src="/yusuke.jpeg" 
+            src="/yusuke.JPG" 
             alt="Profile Image" 
             layout="fill"
             objectFit="cover"
