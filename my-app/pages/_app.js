@@ -23,6 +23,7 @@ function AppContent({ Component, pageProps }) {
   );
 }
 
+
 function MyApp({ Component, pageProps }) {
   return (
     <div className={`${body_font.variable} ${display_font.variable}`}>
